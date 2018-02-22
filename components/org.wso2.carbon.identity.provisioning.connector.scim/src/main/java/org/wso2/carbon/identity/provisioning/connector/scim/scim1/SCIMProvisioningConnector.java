@@ -16,7 +16,7 @@
  * under the License.
  */
 
-package org.wso2.carbon.identity.provisioning.connector.scim;
+package org.wso2.carbon.identity.provisioning.connector.scim.scim1;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.MapUtils;
@@ -24,6 +24,7 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.wso2.carbon.identity.application.common.model.ClaimMapping;
+import org.wso2.carbon.identity.application.common.model.Property;
 import org.wso2.carbon.identity.provisioning.IdentityProvisioningConstants;
 import org.wso2.carbon.identity.provisioning.IdentityProvisioningException;
 import org.wso2.carbon.identity.provisioning.ProvisionedIdentifier;
@@ -31,11 +32,14 @@ import org.wso2.carbon.identity.provisioning.ProvisioningEntity;
 import org.wso2.carbon.identity.provisioning.ProvisioningEntityType;
 import org.wso2.carbon.identity.provisioning.ProvisioningOperation;
 import org.wso2.carbon.identity.provisioning.ProvisioningUtil;
+import org.wso2.carbon.identity.provisioning.connector.scim.AbstractSCIMOutboundProvisioningConnector;
+import org.wso2.carbon.identity.provisioning.connector.scim.SCIMProvisioningConnectorConstants;
 import org.wso2.carbon.identity.scim.common.impl.ProvisioningClient;
 import org.wso2.carbon.identity.scim.common.utils.AttributeMapper;
 import org.wso2.carbon.identity.scim.common.utils.SCIMCommonConstants;
 import org.wso2.carbon.user.core.UserStoreException;
 import org.wso2.charon.core.config.SCIMConfigConstants;
+import org.wso2.charon.core.config.SCIMProvider;
 import org.wso2.charon.core.exceptions.CharonException;
 import org.wso2.charon.core.objects.Group;
 import org.wso2.charon.core.objects.User;
@@ -51,6 +55,7 @@ public class SCIMProvisioningConnector extends AbstractSCIMOutboundProvisioningC
 
     private static final long serialVersionUID = -2800777564581005554L;
     private static Log log = LogFactory.getLog(SCIMProvisioningConnector.class);
+    private SCIMProvider scimProvider = new SCIMProvider();
 
     @Override
     public ProvisionedIdentifier provision(ProvisioningEntity provisioningEntity)
@@ -422,6 +427,17 @@ public class SCIMProvisioningConnector extends AbstractSCIMOutboundProvisioningC
             user.setPassword(getPassword(userEntity.getAttributes()));
         } else if (StringUtils.isNotBlank(scimProvider.getProperty(SCIMProvisioningConnectorConstants.SCIM_DEFAULT_PASSWORD))) {
             user.setPassword(scimProvider.getProperty(SCIMProvisioningConnectorConstants.SCIM_DEFAULT_PASSWORD));
+        }
+    }
+
+    @Override
+    protected void populateSCIMProvider(Property property, String scimPropertyName)
+            throws IdentityProvisioningException {
+
+        if (property.getValue() != null && property.getValue().length() > 0) {
+            scimProvider.setProperty(scimPropertyName, property.getValue());
+        } else if (property.getDefaultValue() != null) {
+            scimProvider.setProperty(scimPropertyName, property.getDefaultValue());
         }
     }
 
