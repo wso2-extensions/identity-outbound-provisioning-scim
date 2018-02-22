@@ -22,12 +22,14 @@ public class SCIMProvisioningConnectorConstants {
 
     private SCIMProvisioningConnectorConstants(){}
 
+    public static final String SCIM_VERSION = "scim-version";
     public static final String SCIM_USER_EP = "scim-user-ep";
     public static final String SCIM_GROUP_EP = "scim-group-ep";
     public static final String SCIM_USERNAME = "scim-username";
     public static final String SCIM_PASSWORD = "scim-password";
     public static final String SCIM_USERSTORE_DOMAIN = "scim-user-store-domain";
     public static final String DEFAULT_SCIM_DIALECT = "urn:scim:schemas:core:1.0";
+    public static final String DEFAULT_SCIM2_DIALECT = "urn:scim:schemas:core:2.0";
 
     public static final String SCIM_ENABLE_PASSWORD_PROVISIONING = "scim-enable-pwd-provisioning";
     public static final String SCIM_DEFAULT_PASSWORD = "scim-default-pwd";
