@@ -64,6 +64,14 @@
             <artifactId>org.wso2.charon.core</artifactId>
         </dependency>
         <dependency>
+            <groupId>org.wso2.charon</groupId>
+            <artifactId>org.wso2.charon3.core</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.wso2.identity.client</groupId>
+            <artifactId>org.wso2.identity.client.scim2</artifactId>
+        </dependency>
+        <dependency>
             <groupId>org.wso2.carbon.identity.inbound.provisioning.scim</groupId>
             <artifactId>org.wso2.carbon.identity.scim.common</artifactId>
         </dependency>
@@ -136,7 +144,8 @@
                             org.wso2.charon.core.config; version="${charon.core.imp.pkg.version.range}",
                             org.wso2.charon.core.objects; version="${charon.core.imp.pkg.version.range}",
                             org.wso2.charon.core.exceptions; version="${charon.core.imp.pkg.version.range}",
-                            org.wso2.charon.core.schema; version="${charon.core.imp.pkg.version.range}"
+                            org.wso2.charon.core.schema; version="${charon.core.imp.pkg.version.range}",
+                            org.wso2.charon3.core.*; version="${charon3.core.imp.pkg.version.range}"
                         </Import-Package>
                         <Export-Package>
                             !org.wso2.carbon.identity.provisioning.connector.scim.internal,
