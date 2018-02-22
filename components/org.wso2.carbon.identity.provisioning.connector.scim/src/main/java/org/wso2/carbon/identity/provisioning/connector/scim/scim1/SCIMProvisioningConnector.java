@@ -24,8 +24,6 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.wso2.carbon.identity.application.common.model.ClaimMapping;
-import org.wso2.carbon.identity.application.common.model.Property;
-import org.wso2.carbon.identity.provisioning.AbstractOutboundProvisioningConnector;
 import org.wso2.carbon.identity.provisioning.IdentityProvisioningConstants;
 import org.wso2.carbon.identity.provisioning.IdentityProvisioningException;
 import org.wso2.carbon.identity.provisioning.ProvisionedIdentifier;
@@ -38,7 +36,6 @@ import org.wso2.carbon.identity.scim.common.utils.AttributeMapper;
 import org.wso2.carbon.identity.scim.common.utils.SCIMCommonConstants;
 import org.wso2.carbon.user.core.UserStoreException;
 import org.wso2.charon.core.config.SCIMConfigConstants;
-import org.wso2.charon.core.config.SCIMProvider;
 import org.wso2.charon.core.exceptions.CharonException;
 import org.wso2.charon.core.objects.Group;
 import org.wso2.charon.core.objects.User;
@@ -50,45 +47,10 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-public class SCIMProvisioningConnector extends AbstractOutboundProvisioningConnector {
+public class SCIMProvisioningConnector extends AbstractSCIMOutboundProvisioningConnector {
 
     private static final long serialVersionUID = -2800777564581005554L;
     private static Log log = LogFactory.getLog(SCIMProvisioningConnector.class);
-    private SCIMProvider scimProvider;
-    private String userStoreDomainName;
-
-    @Override
-    public void init(Property[] provisioningProperties) throws IdentityProvisioningException {
-        scimProvider = new SCIMProvider();
-
-        if (provisioningProperties != null && provisioningProperties.length > 0) {
-
-            for (Property property : provisioningProperties) {
-
-                if (SCIMProvisioningConnectorConstants.SCIM_USER_EP.equals(property.getName())) {
-                    populateSCIMProvider(property, SCIMConfigConstants.ELEMENT_NAME_USER_ENDPOINT);
-                } else if (SCIMProvisioningConnectorConstants.SCIM_GROUP_EP.equals(property.getName())) {
-                    populateSCIMProvider(property, SCIMConfigConstants.ELEMENT_NAME_GROUP_ENDPOINT);
-                } else if (SCIMProvisioningConnectorConstants.SCIM_USERNAME.equals(property.getName())) {
-                    populateSCIMProvider(property, SCIMConfigConstants.ELEMENT_NAME_USERNAME);
-                } else if (SCIMProvisioningConnectorConstants.SCIM_PASSWORD.equals(property.getName())) {
-                    populateSCIMProvider(property, SCIMConfigConstants.ELEMENT_NAME_PASSWORD);
-                } else if (SCIMProvisioningConnectorConstants.SCIM_USERSTORE_DOMAIN.equals(property.getName())) {
-                    userStoreDomainName = property.getValue() != null ? property.getValue()
-                            : property.getDefaultValue();
-                }else if (SCIMProvisioningConnectorConstants.SCIM_ENABLE_PASSWORD_PROVISIONING.equals(property.getName())){
-                    populateSCIMProvider(property, SCIMProvisioningConnectorConstants.SCIM_ENABLE_PASSWORD_PROVISIONING);
-                }else if (SCIMProvisioningConnectorConstants.SCIM_DEFAULT_PASSWORD.equals(property.getName())){
-                    populateSCIMProvider(property, SCIMProvisioningConnectorConstants.SCIM_DEFAULT_PASSWORD);
-                }
-
-                if (IdentityProvisioningConstants.JIT_PROVISIONING_ENABLED.equals(property
-                        .getName()) && "1".equals(property.getValue())) {
-                    jitProvisioningEnabled = true;
-                }
-            }
-        }
-    }
 
     @Override
     public ProvisionedIdentifier provision(ProvisioningEntity provisioningEntity)
@@ -444,21 +406,6 @@ public class SCIMProvisioningConnector extends AbstractOutboundProvisioningConne
     @Override
     protected String getUserStoreDomainName() {
         return userStoreDomainName;
-    }
-
-    /**
-     * @param property
-     * @param scimPropertyName
-     * @throws IdentityProvisioningException
-     */
-    private void populateSCIMProvider(Property property, String scimPropertyName)
-            throws IdentityProvisioningException {
-
-        if (property.getValue() != null && property.getValue().length() > 0) {
-            scimProvider.setProperty(scimPropertyName, property.getValue());
-        } else if (property.getDefaultValue() != null) {
-            scimProvider.setProperty(scimPropertyName, property.getDefaultValue());
-        }
     }
 
     @Override
