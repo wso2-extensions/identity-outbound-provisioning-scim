@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2017, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
+ * Copyright (c) 2018, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,7 +22,13 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.wso2.carbon.identity.application.common.model.Property;
-import org.wso2.carbon.identity.provisioning.*;
+import org.wso2.carbon.identity.provisioning.IdentityProvisioningException;
+import org.wso2.carbon.identity.provisioning.ProvisionedIdentifier;
+import org.wso2.carbon.identity.provisioning.ProvisioningEntity;
+import org.wso2.carbon.identity.provisioning.ProvisioningOperation;
+import org.wso2.carbon.identity.provisioning.ProvisioningEntityType;
+import org.wso2.carbon.identity.provisioning.ProvisioningUtil;
+import org.wso2.carbon.identity.provisioning.IdentityProvisioningConstants;
 import org.wso2.carbon.identity.provisioning.connector.scim.AbstractSCIMOutboundProvisioningConnector;
 import org.wso2.carbon.identity.provisioning.connector.scim.SCIMProvisioningConnectorConstants;
 import org.wso2.carbon.user.core.UserStoreException;
@@ -316,9 +322,11 @@ public class SCIM2ProvisioningConnector extends AbstractSCIMOutboundProvisioning
 
     private void setUserPassword(User user, ProvisioningEntity userEntity) throws CharonException, BadRequestException {
 
-        if ("true".equals(scimProvider.getProperty(SCIMProvisioningConnectorConstants.SCIM_ENABLE_PASSWORD_PROVISIONING))) {
+        if ("true".equals(scimProvider.getProperty(SCIMProvisioningConnectorConstants.
+                SCIM_ENABLE_PASSWORD_PROVISIONING))) {
             this.setPassword(user, getPassword(userEntity.getAttributes()));
-        } else if (StringUtils.isNotBlank(scimProvider.getProperty(SCIMProvisioningConnectorConstants.SCIM_DEFAULT_PASSWORD))) {
+        } else if (StringUtils.isNotBlank(scimProvider.getProperty(SCIMProvisioningConnectorConstants.
+                SCIM_DEFAULT_PASSWORD))) {
            this.setPassword(user, scimProvider.getProperty(SCIMProvisioningConnectorConstants.SCIM_DEFAULT_PASSWORD));
         }
     }
@@ -368,7 +376,8 @@ public class SCIM2ProvisioningConnector extends AbstractSCIMOutboundProvisioning
     private void setPassword(User user, String password) throws CharonException, BadRequestException {
 
         if (user.isAttributeExist(SCIMConstants.UserSchemaConstants.PASSWORD)) {
-            ((SimpleAttribute) user.getAttributeList().get(SCIMConstants.UserSchemaConstants.PASSWORD)).updateValue(password);
+            ((SimpleAttribute) user.getAttributeList().get(SCIMConstants.UserSchemaConstants.PASSWORD)).
+                    updateValue(password);
         } else {
             SimpleAttribute simpleAttribute = new SimpleAttribute(SCIMConstants.UserSchemaConstants.PASSWORD, password);
             simpleAttribute = (SimpleAttribute) DefaultAttributeFactory.

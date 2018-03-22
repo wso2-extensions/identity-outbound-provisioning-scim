@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2017, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
+ * Copyright (c) 2018, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
  *
  * WSO2 Inc. licenses this file to you under the Apache License,
  * Version 2.0 (the "License"); you may not use this file except
@@ -22,7 +22,11 @@ import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.MapUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.wso2.charon3.core.attributes.*;
+import org.wso2.charon3.core.attributes.Attribute;
+import org.wso2.charon3.core.attributes.ComplexAttribute;
+import org.wso2.charon3.core.attributes.MultiValuedAttribute;
+import org.wso2.charon3.core.attributes.SimpleAttribute;
+import org.wso2.charon3.core.attributes.DefaultAttributeFactory;
 import org.wso2.charon3.core.exceptions.BadRequestException;
 import org.wso2.charon3.core.exceptions.CharonException;
 import org.wso2.charon3.core.exceptions.NotFoundException;
@@ -30,8 +34,14 @@ import org.wso2.charon3.core.objects.AbstractSCIMObject;
 import org.wso2.charon3.core.objects.Group;
 import org.wso2.charon3.core.objects.SCIMObject;
 import org.wso2.charon3.core.objects.User;
-import org.wso2.charon3.core.schema.*;
+import org.wso2.charon3.core.schema.AttributeSchema;
+import org.wso2.charon3.core.schema.SCIMConstants;
+import org.wso2.charon3.core.schema.SCIMResourceSchemaManager;
+import org.wso2.charon3.core.schema.SCIMSchemaDefinitions;
 import org.wso2.charon3.core.utils.AttributeUtil;
+import org.wso2.charon3.core.schema.ResourceTypeSchema;
+import org.wso2.charon3.core.schema.SCIMAttributeSchema;
+import org.wso2.charon3.core.schema.SCIMDefinitions;
 
 import java.util.Map;
 import java.util.HashMap;
@@ -45,7 +55,8 @@ import java.util.Arrays;
  */
 public class AttributeMapper {
 
-    private static Log log = LogFactory.getLog(org.wso2.carbon.identity.provisioning.connector.scim.scim2.AttributeMapper.class);
+    private static Log log = LogFactory.getLog(org.wso2.carbon.identity.provisioning.connector.scim.scim2.
+            AttributeMapper.class);
 
     /**
      * Return claims as a map of <ClaimUri (which is mapped to SCIM attribute uri),ClaimValue>
@@ -100,7 +111,8 @@ public class AttributeMapper {
      * @param attribute
      * @param claimsMap
      */
-    private static void setClaimsForSimpleAttribute(Attribute attribute, Map<String, String> claimsMap) throws CharonException {
+    private static void setClaimsForSimpleAttribute(Attribute attribute, Map<String, String> claimsMap) throws
+            CharonException {
         String attributeURI = attribute.getURI();
         if (((SimpleAttribute) attribute).getValue() != null) {
             String attributeValue = AttributeUtil.getStringValueOfAttribute(
@@ -115,7 +127,8 @@ public class AttributeMapper {
      * @param attribute
      * @param claimsMap
      */
-    private static void setClaimsForMultivaluedAttribute(Attribute attribute, Map<String, String> claimsMap) throws CharonException {
+    private static void setClaimsForMultivaluedAttribute(Attribute attribute, Map<String, String> claimsMap) throws
+            CharonException {
         MultiValuedAttribute multiValAttribute = (MultiValuedAttribute) attribute;
         // get the URI of root attribute
         String attributeURI = multiValAttribute.getURI();
@@ -173,7 +186,8 @@ public class AttributeMapper {
      * @param entry
      * @param claimsMap
      */
-    private static void setClaimsForComplexAttribute(Attribute entry, Map<String, String> claimsMap) throws CharonException {
+    private static void setClaimsForComplexAttribute(Attribute entry, Map<String, String> claimsMap) throws
+            CharonException {
 
         // reading attributes list of the complex attribute
         ComplexAttribute entryOfComplexAttribute = (ComplexAttribute) entry;
@@ -261,7 +275,8 @@ public class AttributeMapper {
 
             } else if (attributeNames.length == 3) {
 
-                constructSCIMObjectFromAttributesOfLevelThree(attributeEntry, scimObject, attributeNames, scimObjectType);
+                constructSCIMObjectFromAttributesOfLevelThree(attributeEntry, scimObject, attributeNames,
+                        scimObjectType);
             }
         }
         return scimObject;
@@ -425,7 +440,10 @@ public class AttributeMapper {
      * @throws BadRequestException
      * @throws CharonException
      */
-    public static void constructSCIMObjectFromAttributesOfLevelThree(Map.Entry<String, String> attributeEntry, SCIMObject scimObject, String[] attributeNames, int scimObjectType) throws BadRequestException, CharonException {
+    public static void constructSCIMObjectFromAttributesOfLevelThree(Map.Entry<String, String> attributeEntry,
+                                                                     SCIMObject scimObject, String[] attributeNames,
+                                                                     int scimObjectType) throws BadRequestException,
+            CharonException {
         String parentAttribute = attributeNames[0];
         //get immediate parent attribute name
         String immediateParentAttributeName = attributeNames[1];
@@ -442,12 +460,15 @@ public class AttributeMapper {
 
             SimpleAttribute typeSimpleAttribute = new SimpleAttribute(SCIMConstants.CommonSchemaConstants.TYPE,
                     attributeNames[2]);
-            AttributeSchema typeAttributeSchema = getAttributeSchema(subAttributeSchema.getURI()+".type", scimObjectType);
+            AttributeSchema typeAttributeSchema = getAttributeSchema(subAttributeSchema.getURI()+".type",
+                    scimObjectType);
             DefaultAttributeFactory.createAttribute(typeAttributeSchema, typeSimpleAttribute);
 
-            AttributeSchema valueAttributeSchema = getAttributeSchema(subAttributeSchema.getURI()+".value", scimObjectType);
+            AttributeSchema valueAttributeSchema = getAttributeSchema(subAttributeSchema.getURI()+".value",
+                    scimObjectType);
             SimpleAttribute valueSimpleAttribute = new SimpleAttribute(SCIMConstants.CommonSchemaConstants.VALUE,
-                    AttributeUtil.getAttributeValueFromString(attributeEntry.getValue(), valueAttributeSchema.getType()));
+                    AttributeUtil.getAttributeValueFromString(attributeEntry.getValue(),
+                            valueAttributeSchema.getType()));
             DefaultAttributeFactory.createAttribute(valueAttributeSchema,valueSimpleAttribute);
 
             //need to set a complex type value for multivalued attribute
@@ -502,12 +523,14 @@ public class AttributeMapper {
             // check if the super parent exist
             boolean superParentExist = ((AbstractSCIMObject) scimObject).isAttributeExist(attributeSchema.getName());
             if (superParentExist) {
-                ComplexAttribute superParentAttribute = (ComplexAttribute) ((AbstractSCIMObject) scimObject).getAttribute(attributeSchema.getName());
+                ComplexAttribute superParentAttribute = (ComplexAttribute) ((AbstractSCIMObject) scimObject).
+                        getAttribute(attributeSchema.getName());
                 // check if the immediate parent exist
                 boolean immediateParentExist = superParentAttribute.isSubAttributeExist(immediateParentAttributeName);
                 if (immediateParentExist) {
                     // both the parent and super parent exists
-                    ComplexAttribute immediateParentAttribute = (ComplexAttribute) superParentAttribute.getSubAttribute(immediateParentAttributeName);
+                    ComplexAttribute immediateParentAttribute = (ComplexAttribute) superParentAttribute.
+                            getSubAttribute(immediateParentAttributeName);
                     immediateParentAttribute.setSubAttribute(simpleAttribute);
                 } else { // immediate parent does not exist
                     ComplexAttribute immediateParentAttribute = new ComplexAttribute(immediateParentAttributeName);
@@ -561,7 +584,8 @@ public class AttributeMapper {
                             }
                             if (subAttributeSchema.getType().equals(SCIMDefinitions.DataType.COMPLEX)) {
                                 // this is only valid for extension schema
-                                List<SCIMAttributeSchema> subSubAttributeSchemaList = subAttributeSchema.getSubAttributeSchemas();
+                                List<SCIMAttributeSchema> subSubAttributeSchemaList = subAttributeSchema.
+                                        getSubAttributeSchemas();
                                 for (AttributeSchema subSubAttributeSchema : subSubAttributeSchemaList) {
                                     if (attributeURI.equals(subSubAttributeSchema.getURI())) {
                                         return subSubAttributeSchema;
