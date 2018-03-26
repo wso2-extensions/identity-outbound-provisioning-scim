@@ -48,7 +48,7 @@ public class SCIMProvisioningConnectorFactory extends AbstractProvisioningConnec
 
         AbstractSCIMOutboundProvisioningConnector scimProvisioningConnector;
 
-        if(scimVersion.equalsIgnoreCase(SCIM_VERSION1)) {
+        if (scimVersion.equalsIgnoreCase(SCIM_VERSION1)) {
             scimProvisioningConnector = new SCIMProvisioningConnector();
         } else {
             scimProvisioningConnector = new SCIM2ProvisioningConnector();

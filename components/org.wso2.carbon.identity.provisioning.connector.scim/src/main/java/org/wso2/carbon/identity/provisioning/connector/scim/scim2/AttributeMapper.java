@@ -77,8 +77,7 @@ public class AttributeMapper {
 
             } else if (attribute instanceof MultiValuedAttribute) {
                 setClaimsForMultivaluedAttribute(attribute, claimsMap);
-            }
-            else if (attribute instanceof ComplexAttribute) {
+            } else if (attribute instanceof ComplexAttribute) {
                 // NOTE: in carbon, we only support storing of type and value of a complex multi-valued attribute
                 // reading attributes list of the complex attribute
                 ComplexAttribute complexAttribute = (ComplexAttribute) attribute;
@@ -167,8 +166,7 @@ public class AttributeMapper {
             if(attribute.getName().equals(SCIMConstants.UserSchemaConstants.ADDRESSES)){
                  valueAttribute = (SimpleAttribute) subAttributes.get(SCIMConstants.UserSchemaConstants.
                          FORMATTED_ADDRESS);
-            }
-            else{
+            } else {
                  valueAttribute =
                         (SimpleAttribute) subAttributes.get(SCIMConstants.CommonSchemaConstants.VALUE);
             }
@@ -243,12 +241,11 @@ public class AttributeMapper {
             String attributeURI = attributeEntry.getKey();
             String[] attributeNames;
 
-            if(attributeURI.contains(SCIMConstants.CORE_SCHEMA_URI)){
+            if (attributeURI.contains(SCIMConstants.CORE_SCHEMA_URI)) {
                 String[] attributeURIParts = attributeURI.split(":");
                 String attributeNameString = attributeURIParts[attributeURIParts.length - 1];
                 attributeNames = attributeNameString.split("\\.");
-            }
-            else{
+            } else {
                 ArrayList<String> tempAttributeNames = new ArrayList<>();
                 String extensionURI = "";
                 String[] attributeURIParts = attributeURI.split(":");
@@ -339,7 +336,7 @@ public class AttributeMapper {
         String parentAttributeName = attributeNames[0];
         //get parent attribute schema
         String parentAttributeURI = attributeEntry.getKey().replace("."+attributeNames[1],"");
-        if(parentAttributeURI.equals(attributeEntry.getKey())){
+        if (parentAttributeURI.equals(attributeEntry.getKey())) {
             parentAttributeURI = attributeEntry.getKey().replace(":"+attributeNames[1],"");
         }
         AttributeSchema parentAttributeSchema = getAttributeSchema(parentAttributeURI, scimObjectType);
@@ -350,10 +347,10 @@ public class AttributeMapper {
             //get the value sub attribute
             String valueAttributeURI = attributeEntry.getKey().replace("."+attributeNames[1],"");
             AttributeSchema valueSubAttributeSchema = null;
-            if(valueAttributeURI.equals(SCIMConstants.UserSchemaConstants.ADDRESSES_URI)){
+            if (valueAttributeURI.equals(SCIMConstants.UserSchemaConstants.ADDRESSES_URI)){
                 valueAttributeURI = valueAttributeURI+".formatted";
                 valueSubAttributeSchema = getAttributeSchema(valueAttributeURI, scimObjectType);
-            }else{
+            } else {
                 valueAttributeURI = valueAttributeURI+".value";
                 valueSubAttributeSchema = getAttributeSchema(valueAttributeURI, scimObjectType);
             }
@@ -374,10 +371,10 @@ public class AttributeMapper {
             Object type = SCIMCommonConstants.DEFAULT;
             Object value = SCIMCommonConstants.DEFAULT;
 
-            if(typeSimpleAttribute.getValue() != null){
+            if (typeSimpleAttribute.getValue() != null) {
                 type = typeSimpleAttribute.getValue();
             }
-            if(valueSimpleAttribute.getValue() != null){
+            if (valueSimpleAttribute.getValue() != null) {
                 value = valueSimpleAttribute.getValue();
             }
             String complexName = parentAttributeName + "_" + value + "_" + type;
@@ -467,10 +464,10 @@ public class AttributeMapper {
             Object type = SCIMCommonConstants.DEFAULT;
             Object value = SCIMCommonConstants.DEFAULT;
 
-            if(typeSimpleAttribute.getValue() != null){
+            if (typeSimpleAttribute.getValue() != null) {
                 type = typeSimpleAttribute.getValue();
             }
-            if(valueSimpleAttribute.getValue() != null){
+            if (valueSimpleAttribute.getValue() != null) {
                 value = valueSimpleAttribute.getValue();
             }
             String complexName = immediateParentAttributeName + "_" + value + "_" + type;
@@ -481,7 +478,7 @@ public class AttributeMapper {
 
             ComplexAttribute extensionComplexAttribute = null;
 
-            if(((AbstractSCIMObject) scimObject).isAttributeExist(parentAttribute)) {
+            if (((AbstractSCIMObject) scimObject).isAttributeExist(parentAttribute)) {
                 Attribute extensionAttribute = ((AbstractSCIMObject) scimObject).getAttribute(parentAttribute);
                 extensionComplexAttribute = ((ComplexAttribute) extensionAttribute);
             }else{
