@@ -421,7 +421,6 @@ public class AttributeMapper {
                 DefaultAttributeFactory.createAttribute(parentAttributeSchema, complexAttribute);
                 ((AbstractSCIMObject) scimObject).setAttribute(complexAttribute);
             }
-
         }
     }
 
