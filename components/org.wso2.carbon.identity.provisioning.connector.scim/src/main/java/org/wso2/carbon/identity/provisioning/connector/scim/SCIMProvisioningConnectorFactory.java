@@ -47,7 +47,6 @@ public class SCIMProvisioningConnectorFactory extends AbstractProvisioningConnec
         }
 
         AbstractSCIMOutboundProvisioningConnector scimProvisioningConnector;
-
         if (scimVersion.equalsIgnoreCase(SCIM_VERSION1)) {
             scimProvisioningConnector = new SCIMProvisioningConnector();
         } else {
@@ -55,18 +54,14 @@ public class SCIMProvisioningConnectorFactory extends AbstractProvisioningConnec
         }
 
         scimProvisioningConnector.init(provisioningProperties);
-
         if (log.isDebugEnabled()) {
             log.debug("Created new connector of type : " + scimVersion);
         }
-
         return scimProvisioningConnector;
-
     }
 
     @Override
     public String getConnectorType() {
         return SCIM;
     }
-
 }
