@@ -165,8 +165,8 @@ public class AttributeMapper {
             }
             SimpleAttribute valueAttribute = null;
             if(attribute.getName().equals(SCIMConstants.UserSchemaConstants.ADDRESSES)){
-                 valueAttribute =
-                        (SimpleAttribute) subAttributes.get(SCIMConstants.UserSchemaConstants.FORMATTED_ADDRESS);
+                 valueAttribute = (SimpleAttribute) subAttributes.get(SCIMConstants.UserSchemaConstants.
+                         FORMATTED_ADDRESS);
             }
             else{
                  valueAttribute =
@@ -266,15 +266,10 @@ public class AttributeMapper {
             }
 
             if (attributeNames.length == 1) {
-
                 constructSCIMObjectFromAttributesOfLevelOne(attributeEntry, scimObject, attributeNames, scimObjectType);
-
             } else if (attributeNames.length == 2) {
-
                 constructSCIMObjectFromAttributesOfLevelTwo(attributeEntry, scimObject, attributeNames, scimObjectType);
-
             } else if (attributeNames.length == 3) {
-
                 constructSCIMObjectFromAttributesOfLevelThree(attributeEntry, scimObject, attributeNames,
                         scimObjectType);
             }
@@ -312,7 +307,6 @@ public class AttributeMapper {
                 //set attribute in scim object
                 DefaultAttributeFactory.createAttribute(attributeSchema, multiValuedAttribute);
                 ((AbstractSCIMObject) scimObject).setAttribute(multiValuedAttribute);
-
             } else {
                 //convert attribute to relevant type
                 Object attributeValueObject = AttributeUtil.getAttributeValueFromString(
@@ -457,7 +451,6 @@ public class AttributeMapper {
                 /*differentiate between sub attribute of Complex attribute and a Multivalued attribute
                 with complex value*/
         if (subAttributeSchema.getMultiValued()) {
-
             SimpleAttribute typeSimpleAttribute = new SimpleAttribute(SCIMConstants.CommonSchemaConstants.TYPE,
                     attributeNames[2]);
             AttributeSchema typeAttributeSchema = getAttributeSchema(subAttributeSchema.getURI()+".type",
@@ -512,7 +505,6 @@ public class AttributeMapper {
                 extensionComplexAttribute.setSubAttribute(multivaluedAttribute);
             }
         } else {
-
             AttributeSchema subSubAttributeSchema = getAttributeSchema(attributeEntry.getKey(), scimObjectType);
             //we assume sub attribute is simple attribute
             SimpleAttribute simpleAttribute = new SimpleAttribute(attributeNames[2],

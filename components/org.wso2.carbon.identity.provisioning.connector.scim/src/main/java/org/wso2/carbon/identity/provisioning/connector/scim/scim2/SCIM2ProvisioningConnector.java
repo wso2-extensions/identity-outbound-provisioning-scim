@@ -61,7 +61,6 @@ public class SCIM2ProvisioningConnector extends AbstractSCIMOutboundProvisioning
     @Override
     public ProvisionedIdentifier provision(ProvisioningEntity provisioningEntity)
             throws IdentityProvisioningException {
-
         if (provisioningEntity != null) {
 
             if (provisioningEntity.isJitProvisioning() && !isJitProvisioningEnabled()) {
@@ -103,9 +102,7 @@ public class SCIM2ProvisioningConnector extends AbstractSCIMOutboundProvisioning
      * @throws UserStoreException
      */
     private void createUser(ProvisioningEntity userEntity) throws IdentityProvisioningException {
-
         try {
-
             List<String> userNames = getUserNames(userEntity.getAttributes());
             String userName = null;
 
@@ -127,7 +124,6 @@ public class SCIM2ProvisioningConnector extends AbstractSCIMOutboundProvisioning
             ProvisioningClient scimProvsioningClient = new ProvisioningClient(scimProvider, user,
                     null);
             scimProvsioningClient.provisionCreateUser();
-
         } catch (Exception e) {
             throw new IdentityProvisioningException("Error while creating the user", e);
         }
@@ -138,7 +134,6 @@ public class SCIM2ProvisioningConnector extends AbstractSCIMOutboundProvisioning
      * @throws IdentityProvisioningException
      */
     private void deleteUser(ProvisioningEntity userEntity) throws IdentityProvisioningException {
-
         try {
             List<String> userNames = getUserNames(userEntity.getAttributes());
             String userName = null;
@@ -152,7 +147,6 @@ public class SCIM2ProvisioningConnector extends AbstractSCIMOutboundProvisioning
             ProvisioningClient scimProvsioningClient = new ProvisioningClient(scimProvider, user,
                     null);
             scimProvsioningClient.provisionDeleteUser();
-
         } catch (Exception e) {
             throw new IdentityProvisioningException("Error while deleting user.", e);
         }
@@ -164,9 +158,7 @@ public class SCIM2ProvisioningConnector extends AbstractSCIMOutboundProvisioning
      */
     private void updateUser(ProvisioningEntity userEntity, ProvisioningOperation provisioningOperation) throws
             IdentityProvisioningException {
-
         try {
-
             List<String> userNames = getUserNames(userEntity.getAttributes());
             String userName = null;
 
@@ -181,8 +173,7 @@ public class SCIM2ProvisioningConnector extends AbstractSCIMOutboundProvisioning
 
             // if user created through management console, claim values are not present.
             if (MapUtils.isNotEmpty(singleValued)) {
-                user = (User) AttributeMapper.constructSCIMObjectFromAttributes(singleValued,
-                        1);
+                user = (User) AttributeMapper.constructSCIMObjectFromAttributes(singleValued, 1);
             } else {
                 user = new User();
             }
@@ -190,12 +181,10 @@ public class SCIM2ProvisioningConnector extends AbstractSCIMOutboundProvisioning
             user.setUserName(userName);
             setUserPassword(user, userEntity);
 
-            ProvisioningClient scimProvisioningClient = new ProvisioningClient(scimProvider, user,
-                    null);
+            ProvisioningClient scimProvisioningClient = new ProvisioningClient(scimProvider, user, null);
             if (ProvisioningOperation.PUT.equals(provisioningOperation)) {
                 scimProvisioningClient.provisionUpdateUser();
             }
-
         } catch (Exception e) {
             throw new IdentityProvisioningException("Error while creating the user", e);
         }
@@ -207,7 +196,6 @@ public class SCIM2ProvisioningConnector extends AbstractSCIMOutboundProvisioning
      * @throws IdentityProvisioningException
      */
     private String createGroup(ProvisioningEntity groupEntity) throws IdentityProvisioningException {
-
         try {
             List<String> groupNames = getGroupNames(groupEntity.getAttributes());
             String groupName = null;
@@ -238,9 +226,7 @@ public class SCIM2ProvisioningConnector extends AbstractSCIMOutboundProvisioning
      * @throws IdentityProvisioningException
      */
     private void deleteGroup(ProvisioningEntity groupEntity) throws IdentityProvisioningException {
-
         try {
-
             List<String> groupNames = getGroupNames(groupEntity.getAttributes());
             String groupName = null;
 
@@ -265,9 +251,7 @@ public class SCIM2ProvisioningConnector extends AbstractSCIMOutboundProvisioning
      * @throws IdentityProvisioningException
      */
     private void updateGroup(ProvisioningEntity groupEntity) throws IdentityProvisioningException {
-
         try {
-
             List<String> groupNames = getGroupNames(groupEntity.getAttributes());
             String groupName = null;
 
@@ -306,7 +290,6 @@ public class SCIM2ProvisioningConnector extends AbstractSCIMOutboundProvisioning
     @Override
     protected void populateSCIMProvider(Property property, String scimPropertyName)
             throws IdentityProvisioningException {
-
         if (property.getValue() != null && property.getValue().length() > 0) {
             scimProvider.setProperty(scimPropertyName, property.getValue());
         } else if (property.getDefaultValue() != null) {
@@ -316,12 +299,10 @@ public class SCIM2ProvisioningConnector extends AbstractSCIMOutboundProvisioning
 
     @Override
     public String getClaimDialectUri() throws IdentityProvisioningException {
-
         return SCIMProvisioningConnectorConstants.DEFAULT_SCIM2_DIALECT;
     }
 
     private void setUserPassword(User user, ProvisioningEntity userEntity) throws CharonException, BadRequestException {
-
         if ("true".equals(scimProvider.getProperty(SCIMProvisioningConnectorConstants.
                 SCIM_ENABLE_PASSWORD_PROVISIONING))) {
             this.setPassword(user, getPassword(userEntity.getAttributes()));
@@ -332,7 +313,6 @@ public class SCIM2ProvisioningConnector extends AbstractSCIMOutboundProvisioning
     }
 
     private void setGroupMembers(Group group, List<String> userList) throws AbstractCharonException {
-
         if (CollectionUtils.isNotEmpty(userList)) {
             for (Iterator<String> iterator = userList.iterator(); iterator.hasNext(); ) {
                 String userName = iterator.next();
@@ -342,7 +322,6 @@ public class SCIM2ProvisioningConnector extends AbstractSCIMOutboundProvisioning
     }
 
     private void setMember(Group group, String userName) throws BadRequestException, CharonException {
-
         if (group.isAttributeExist(SCIMConstants.GroupSchemaConstants.MEMBERS)) {
             MultiValuedAttribute members = (MultiValuedAttribute) group.getAttributeList().get(
                     SCIMConstants.GroupSchemaConstants.MEMBERS);
@@ -359,7 +338,6 @@ public class SCIM2ProvisioningConnector extends AbstractSCIMOutboundProvisioning
 
     private ComplexAttribute setMemberCommon(String userName)
             throws BadRequestException, CharonException {
-
         ComplexAttribute complexAttribute = new ComplexAttribute();
 
         SimpleAttribute displaySimpleAttribute = new SimpleAttribute(
@@ -374,7 +352,6 @@ public class SCIM2ProvisioningConnector extends AbstractSCIMOutboundProvisioning
     }
 
     private void setPassword(User user, String password) throws CharonException, BadRequestException {
-
         if (user.isAttributeExist(SCIMConstants.UserSchemaConstants.PASSWORD)) {
             ((SimpleAttribute) user.getAttributeList().get(SCIMConstants.UserSchemaConstants.PASSWORD)).
                     updateValue(password);
@@ -385,5 +362,4 @@ public class SCIM2ProvisioningConnector extends AbstractSCIMOutboundProvisioning
             user.getAttributeList().put(SCIMConstants.UserSchemaConstants.PASSWORD, simpleAttribute);
         }
     }
-
 }

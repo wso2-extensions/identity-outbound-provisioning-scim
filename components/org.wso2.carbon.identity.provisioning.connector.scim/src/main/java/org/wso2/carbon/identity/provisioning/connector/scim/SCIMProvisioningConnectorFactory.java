@@ -39,7 +39,6 @@ public class SCIMProvisioningConnectorFactory extends AbstractProvisioningConnec
     @Override
     protected AbstractSCIMOutboundProvisioningConnector buildConnector(Property[] provisioningProperties)
             throws IdentityProvisioningException {
-
         String scimVersion = SCIM_VERSION1;
         for (Property property : provisioningProperties) {
             if (SCIMProvisioningConnectorConstants.SCIM_VERSION.equals(property.getName())) {

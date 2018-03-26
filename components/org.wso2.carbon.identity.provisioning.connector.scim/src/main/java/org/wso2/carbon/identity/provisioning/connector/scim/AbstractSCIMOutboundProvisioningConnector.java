@@ -30,11 +30,8 @@ public abstract class AbstractSCIMOutboundProvisioningConnector extends Abstract
 
     @Override
     public void init(Property[] provisioningProperties) throws IdentityProvisioningException {
-
         if (provisioningProperties != null && provisioningProperties.length > 0) {
-
             for (Property property : provisioningProperties) {
-
                 if (SCIMProvisioningConnectorConstants.SCIM_USER_EP.equals(property.getName())) {
                     populateSCIMProvider(property, SCIMConfigConstants.ELEMENT_NAME_USER_ENDPOINT);
                 } else if (SCIMProvisioningConnectorConstants.SCIM_GROUP_EP.equals(property.getName())) {
