@@ -90,9 +90,9 @@
                 <version>${charon3.wso2.version.identity}</version>
             </dependency>
             <dependency>
-                <groupId>org.wso2.identity.client</groupId>
-                <artifactId>org.wso2.identity.client.scim2</artifactId>
-                <version>${identity.client.scim2.version}</version>
+                <groupId>org.wso2.carbon.extension.identity.scim2</groupId>
+                <artifactId>org.wso2.carbon.extension.identity.scim2.client</artifactId>
+                <version>${identity.scim2.client.version}</version>
             </dependency>
             <dependency>
                 <groupId>commons-lang.wso2</groupId>
@@ -288,7 +288,7 @@
         <charon3.core.imp.pkg.version.range>[3.0.0,4.0.0)</charon3.core.imp.pkg.version.range>
 
         <!-- SCIM 2.0 client -->
-        <identity.client.scim2.version>1.0.0</identity.client.scim2.version>
+        <identity.scim2.client.version>[1.0.0,2.0.0)</identity.scim2.client.version>
 
         <!-- Commons -->
         <commons-lang.wso2.osgi.version.range>[2.6.0,3.0.0)</commons-lang.wso2.osgi.version.range>
