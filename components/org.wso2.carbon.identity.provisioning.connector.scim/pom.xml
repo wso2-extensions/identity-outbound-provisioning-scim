@@ -64,6 +64,14 @@
             <artifactId>org.wso2.charon.core</artifactId>
         </dependency>
         <dependency>
+            <groupId>org.wso2.charon</groupId>
+            <artifactId>org.wso2.charon3.core</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.wso2.carbon.extension.identity.scim2</groupId>
+            <artifactId>org.wso2.carbon.extension.identity.scim2.client</artifactId>
+        </dependency>
+        <dependency>
             <groupId>org.wso2.carbon.identity.inbound.provisioning.scim</groupId>
             <artifactId>org.wso2.carbon.identity.scim.common</artifactId>
         </dependency>
@@ -136,7 +144,10 @@
                             org.wso2.charon.core.config; version="${charon.core.imp.pkg.version.range}",
                             org.wso2.charon.core.objects; version="${charon.core.imp.pkg.version.range}",
                             org.wso2.charon.core.exceptions; version="${charon.core.imp.pkg.version.range}",
-                            org.wso2.charon.core.schema; version="${charon.core.imp.pkg.version.range}"
+                            org.wso2.charon.core.schema; version="${charon.core.imp.pkg.version.range}",
+                            org.wso2.charon3.core.*; version="${charon3.core.imp.pkg.version.range}",
+                            org.wso2.scim2.*;version="${identity.scim2.client.version}",
+                            io.scim2.swagger.client.*;version="${identity.scim2.client.version}"
                         </Import-Package>
                         <Export-Package>
                             !org.wso2.carbon.identity.provisioning.connector.scim.internal,

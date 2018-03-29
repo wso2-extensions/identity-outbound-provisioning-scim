@@ -23,6 +23,8 @@ import org.apache.commons.logging.LogFactory;
 import org.wso2.carbon.identity.application.common.model.Property;
 import org.wso2.carbon.identity.provisioning.AbstractProvisioningConnectorFactory;
 import org.wso2.carbon.identity.provisioning.IdentityProvisioningException;
+import org.wso2.carbon.identity.provisioning.connector.scim.scim1.SCIMProvisioningConnector;
+import org.wso2.carbon.identity.provisioning.connector.scim.scim2.SCIM2ProvisioningConnector;
 
 /**
  * @author
@@ -30,19 +32,30 @@ import org.wso2.carbon.identity.provisioning.IdentityProvisioningException;
 public class SCIMProvisioningConnectorFactory extends AbstractProvisioningConnectorFactory {
 
     public static final String SCIM = "scim";
+    private static final String SCIM_VERSION1 = "scim1";
+    private static final String SCIM_VERSION2 = "scim2";
     private static final Log log = LogFactory.getLog(SCIMProvisioningConnectorFactory.class);
 
     @Override
-    /**
-     * @throws IdentityProvisioningException
-     */
-    protected SCIMProvisioningConnector buildConnector(Property[] provisioningProperties)
+    protected AbstractSCIMOutboundProvisioningConnector buildConnector(Property[] provisioningProperties)
             throws IdentityProvisioningException {
-        SCIMProvisioningConnector scimProvisioningConnector = new SCIMProvisioningConnector();
-        scimProvisioningConnector.init(provisioningProperties);
+        String scimVersion = SCIM_VERSION1;
+        for (Property property : provisioningProperties) {
+            if (SCIMProvisioningConnectorConstants.SCIM_VERSION.equals(property.getName())) {
+                scimVersion = property.getValue();
+            }
+        }
 
+        AbstractSCIMOutboundProvisioningConnector scimProvisioningConnector;
+        if (scimVersion.equalsIgnoreCase(SCIM_VERSION1)) {
+            scimProvisioningConnector = new SCIMProvisioningConnector();
+        } else {
+            scimProvisioningConnector = new SCIM2ProvisioningConnector();
+        }
+
+        scimProvisioningConnector.init(provisioningProperties);
         if (log.isDebugEnabled()) {
-            log.debug("Created new connector of type : " + SCIM);
+            log.debug("Created new connector of type : " + scimVersion);
         }
         return scimProvisioningConnector;
     }
@@ -51,5 +64,4 @@ public class SCIMProvisioningConnectorFactory extends AbstractProvisioningConnec
     public String getConnectorType() {
         return SCIM;
     }
-
 }
