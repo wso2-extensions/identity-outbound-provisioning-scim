@@ -59,6 +59,7 @@ public class SCIMProvisioningConnector extends AbstractOutboundProvisioningConne
 
     @Override
     public void init(Property[] provisioningProperties) throws IdentityProvisioningException {
+
         scimProvider = new SCIMProvider();
 
         if (provisioningProperties != null && provisioningProperties.length > 0) {
@@ -315,6 +316,7 @@ public class SCIMProvisioningConnector extends AbstractOutboundProvisioningConne
      * @throws IdentityProvisioningException
      */
     private String createGroup(ProvisioningEntity groupEntity) throws IdentityProvisioningException {
+
         try {
             List<String> groupNames = getGroupNames(groupEntity.getAttributes());
             String groupName = null;
@@ -355,6 +357,7 @@ public class SCIMProvisioningConnector extends AbstractOutboundProvisioningConne
      * @throws IdentityProvisioningException
      */
     private void deleteGroup(ProvisioningEntity groupEntity) throws IdentityProvisioningException {
+
         try {
 
             List<String> groupNames = getGroupNames(groupEntity.getAttributes());
@@ -385,6 +388,7 @@ public class SCIMProvisioningConnector extends AbstractOutboundProvisioningConne
      * @throws IdentityProvisioningException
      */
     private void updateGroup(ProvisioningEntity groupEntity) throws IdentityProvisioningException {
+
         try {
 
             List<String> groupNames = getGroupNames(groupEntity.getAttributes());
@@ -463,15 +467,42 @@ public class SCIMProvisioningConnector extends AbstractOutboundProvisioningConne
 
     @Override
     public String getClaimDialectUri() throws IdentityProvisioningException {
+
         return SCIMProvisioningConnectorConstants.DEFAULT_SCIM_DIALECT;
     }
 
     public boolean isEnabled() throws IdentityProvisioningException {
+
         return true;
     }
 
+    @Override
+    protected String getPassword(Map<ClaimMapping, List<String>> attributeMap) {
+
+        String password = "";
+        List<String> claimValues = ProvisioningUtil.getClaimValues(attributeMap,
+                IdentityProvisioningConstants.PASSWORD_CLAIM_URI, null);
+
+        if (CollectionUtils.isNotEmpty(claimValues) && StringUtils.isNotBlank(claimValues.get(0))) {
+            password = claimValues.get(0);
+        } else if (StringUtils.isNotBlank(scimProvider.getProperty(SCIMProvisioningConnectorConstants
+                .SCIM_DEFAULT_PASSWORD))) {
+            if (log.isDebugEnabled()) {
+                log.debug("Could not get the password for the user. Setting default password as the user password");
+            }
+            password = scimProvider.getProperty(SCIMProvisioningConnectorConstants.SCIM_DEFAULT_PASSWORD);
+        } else {
+            log.warn("Could not get the password or a default password for the user. " +
+                    "User will be provisioned with an empty password");
+        }
+
+        return password;
+    }
+
     private void setUserPassword(User user, ProvisioningEntity userEntity) throws CharonException {
-        if ("true".equals(scimProvider.getProperty(SCIMProvisioningConnectorConstants.SCIM_ENABLE_PASSWORD_PROVISIONING))) {
+
+        if (Boolean.parseBoolean(scimProvider.getProperty(SCIMProvisioningConnectorConstants
+                .SCIM_ENABLE_PASSWORD_PROVISIONING))) {
             user.setPassword(getPassword(userEntity.getAttributes()));
         } else if (StringUtils.isNotBlank(scimProvider.getProperty(SCIMProvisioningConnectorConstants.SCIM_DEFAULT_PASSWORD))) {
             user.setPassword(scimProvider.getProperty(SCIMProvisioningConnectorConstants.SCIM_DEFAULT_PASSWORD));
