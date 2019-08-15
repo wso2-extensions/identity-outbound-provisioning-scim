@@ -30,7 +30,8 @@ import org.wso2.carbon.identity.provisioning.connector.scim.SCIMProvisioningConn
  * immediate="true"
  */
 public class SCIMConnectorServiceComponent {
-    private static Log log = LogFactory.getLog(SCIMConnectorServiceComponent.class);
+
+    private static final Log log = LogFactory.getLog(SCIMConnectorServiceComponent.class);
 
     protected void activate(ComponentContext context) {
 
