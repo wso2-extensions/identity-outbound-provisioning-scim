@@ -117,6 +117,7 @@ public class SCIMProvisioningConnectorFactory extends AbstractProvisioningConnec
         defaultPwd.setDisplayName("Default Password");
         defaultPwd.setRequired(false);
         defaultPwd.setType("string");
+        defaultPwd.setConfidential(true);
         enablePwdProvisioning.setSubProperties(new SubProperty[] {defaultPwd});
         configProperties.add(enablePwdProvisioning);
 
