@@ -541,10 +541,10 @@ public class SCIMProvisioningConnector extends AbstractOutboundProvisioningConne
         for (Iterator<Map.Entry<ClaimMapping, List<String>>> iterator = attributes.entrySet().iterator();
              iterator.hasNext(); ) {
             Map.Entry<ClaimMapping, List<String>> entry = iterator.next();
-            if (SCIMConstants.META_CREATED_URI.equals(entry.getKey().getLocalClaim().getClaimUri()) ||
-                    SCIMConstants.ID_URI.equals(entry.getKey().getLocalClaim().getClaimUri()) ||
-                    SCIMConstants.META_LOCATION_URI.equals(entry.getKey().getLocalClaim().getClaimUri()) ||
-                    SCIMConstants.META_LAST_MODIFIED_URI.equals(entry.getKey().getLocalClaim().getClaimUri())) {
+            if (SCIMConstants.META_CREATED_URI.equals(entry.getKey().getRemoteClaim().getClaimUri()) ||
+                    SCIMConstants.ID_URI.equals(entry.getKey().getRemoteClaim().getClaimUri()) ||
+                    SCIMConstants.META_LOCATION_URI.equals(entry.getKey().getRemoteClaim().getClaimUri()) ||
+                    SCIMConstants.META_LAST_MODIFIED_URI.equals(entry.getKey().getRemoteClaim().getClaimUri())) {
                 iterator.remove();
             }
         }
