@@ -76,6 +76,7 @@ public class SCIMProvisioningConnectorFactory extends AbstractProvisioningConnec
         password.setDisplayName("Password");
         password.setRequired(true);
         password.setType("string");
+        password.setConfidential(true);
         password.setDisplayOrder(2);
         configProperties.add(password);
 
