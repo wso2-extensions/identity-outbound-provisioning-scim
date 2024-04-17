@@ -6,5 +6,12 @@
     "description": "WSO2 Outbound provisioning is supported via SCIM standard",
     "status": "Active",
     "labels": [],
-    "releases": []
+    "releases": [
+        {
+            "tagName": "5.1.2",
+            "products": [
+                "IS 5.2.0"
+            ]
+        }
+    ]
 }
