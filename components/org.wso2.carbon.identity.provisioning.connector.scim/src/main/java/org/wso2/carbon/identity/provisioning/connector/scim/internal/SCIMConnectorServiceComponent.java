@@ -21,18 +21,23 @@ package org.wso2.carbon.identity.provisioning.connector.scim.internal;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.osgi.service.component.ComponentContext;
+import org.osgi.service.component.annotations.Activate;
+import org.osgi.service.component.annotations.Component;
 import org.wso2.carbon.identity.provisioning.AbstractProvisioningConnectorFactory;
 import org.wso2.carbon.identity.provisioning.connector.scim.SCIMProvisioningConnectorFactory;
 
 /**
- * @scr.component name=
- * "org.wso2.carbon.identity.provisioning.connector.scim.internal.SCIMConnectorServiceComponent"
- * immediate="true"
+ * OSGI Service Component that handles SCIM Connector activation.
  */
+@Component(
+        name = "org.wso2.carbon.identity.provisioning.connector.scim.internal.SCIMConnectorServiceComponent",
+        immediate = true
+)
 public class SCIMConnectorServiceComponent {
 
     private static final Log log = LogFactory.getLog(SCIMConnectorServiceComponent.class);
 
+    @Activate
     protected void activate(ComponentContext context) {
 
         if (log.isDebugEnabled()) {
